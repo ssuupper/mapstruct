@@ -16,7 +16,6 @@ import org.junit.runners.model.TestClass;
  * @author Andreas Gudian
  */
 class InnerAnnotationProcessorRunner extends BlockJUnit4ClassRunner {
-    static final ModifiableURLClassLoader TEST_CLASS_LOADER = new ModifiableURLClassLoader();
     private final Class<?> klass;
     private final Compiler compiler;
     private final CompilationCache compilationCache;
@@ -54,7 +53,7 @@ class InnerAnnotationProcessorRunner extends BlockJUnit4ClassRunner {
 
     }
 
-    private static void replaceContextClassLoader(Class<?> klass) {
+    static void replaceContextClassLoader(Class<?> klass) {
         ModifiableURLClassLoader testClassLoader = new ModifiableURLClassLoader().withOriginOf( klass );
 
         Thread.currentThread().setContextClassLoader( testClassLoader );

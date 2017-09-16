@@ -52,11 +52,11 @@ import com.puppycrawl.tools.checkstyle.PropertiesExpander;
  */
 abstract class CompilingStatement extends Statement {
 
-    private static final String TARGET_COMPILATION_TESTS = "/target/compilation-tests/";
+    static final String TARGET_COMPILATION_TESTS = "/target/compilation-tests/";
 
-    private static final String LINE_SEPARATOR = System.getProperty( "line.separator" );
+    static final String LINE_SEPARATOR = System.getProperty( "line.separator" );
 
-    private static final DiagnosticDescriptorComparator COMPARATOR = new DiagnosticDescriptorComparator();
+    static final DiagnosticDescriptorComparator COMPARATOR = new DiagnosticDescriptorComparator();
 
     protected static final String SOURCE_DIR = getBasePath() + "/src/test/java";
 
@@ -450,7 +450,7 @@ abstract class CompilingStatement extends Statement {
         return resultHolder;
     }
 
-    protected Object loadAndInstantiate(ClassLoader processorClassloader, Class<?> clazz) {
+    protected static Object loadAndInstantiate(ClassLoader processorClassloader, Class<?> clazz) {
         try {
             return processorClassloader.loadClass( clazz.getName() ).newInstance();
         }
@@ -469,7 +469,7 @@ abstract class CompilingStatement extends Statement {
         return !compilationRequest.equals( compilationCache.getLastRequest() );
     }
 
-    private static String getBasePath() {
+    static String getBasePath() {
         try {
             return new File( "." ).getCanonicalPath();
         }
@@ -492,7 +492,7 @@ abstract class CompilingStatement extends Statement {
         directory.mkdirs();
     }
 
-    private void deleteDirectory(File path) {
+    static void deleteDirectory(File path) {
         if ( path.exists() ) {
             File[] files = path.listFiles();
             for ( int i = 0; i < files.length; i++ ) {
@@ -533,7 +533,7 @@ abstract class CompilingStatement extends Statement {
         return false;
     }
 
-    private static class DiagnosticDescriptorComparator implements Comparator<DiagnosticDescriptor> {
+    static class DiagnosticDescriptorComparator implements Comparator<DiagnosticDescriptor> {
 
         @Override
         public int compare(DiagnosticDescriptor o1, DiagnosticDescriptor o2) {

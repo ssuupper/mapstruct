@@ -33,14 +33,14 @@ import org.mapstruct.ap.testutil.compilation.model.DiagnosticDescriptor;
  */
 class JdkCompilingStatement extends CompilingStatement {
 
-    private static final List<File> COMPILER_CLASSPATH_FILES = asFiles( TEST_COMPILATION_CLASSPATH );
+     static final List<File> COMPILER_CLASSPATH_FILES = asFiles( TEST_COMPILATION_CLASSPATH );
 
-    private static final ClassLoader DEFAULT_PROCESSOR_CLASSLOADER =
+     static final ClassLoader DEFAULT_PROCESSOR_CLASSLOADER =
         new ModifiableURLClassLoader( new FilteringParentClassLoader( "org.mapstruct." ) )
                 .withPaths( PROCESSOR_CLASSPATH );
 
     JdkCompilingStatement(FrameworkMethod method, CompilationCache compilationCache) {
-        super( method, compilationCache );
+         super( method, compilationCache );
     }
 
     @Override

@@ -1,19 +1,30 @@
-/*
- * Copyright MapStruct Authors.
+/**
+ * Copyright 2012-2017 Gunnar Morling (http://www.gunnarmorling.de/)
+ * and/or other contributors as indicated by the @authors tag. See the
+ * copyright.txt file in the distribution for a full listing of all
+ * contributors.
  *
- * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.mapstruct.ap.test.complex;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.Extensions;
 import org.mapstruct.ap.test.complex._target.CarDto;
 import org.mapstruct.ap.test.complex._target.PersonDto;
 import org.mapstruct.ap.test.complex.other.DateMapper;
@@ -21,8 +32,20 @@ import org.mapstruct.ap.test.complex.source.Car;
 import org.mapstruct.ap.test.complex.source.Category;
 import org.mapstruct.ap.test.complex.source.Person;
 import org.mapstruct.ap.testutil.WithClasses;
-import org.mapstruct.ap.testutil.runner.AnnotationProcessorTestRunner;
+import org.mapstruct.ap.testutil.api.CompilerTest;
+import org.mapstruct.ap.testutil.runner.EclipseTemplateContextProvider;
+import org.mapstruct.ap.testutil.runner.JdkTemplateContextProvider;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * @author Filip Hrisafov
+ */
+@Extensions({
+    @ExtendWith(JdkTemplateContextProvider.class),
+    @ExtendWith(EclipseTemplateContextProvider.class)
+
+})
 @WithClasses({
     Car.class,
     CarDto.class,
@@ -32,16 +55,11 @@ import org.mapstruct.ap.testutil.runner.AnnotationProcessorTestRunner;
     Category.class,
     DateMapper.class
 })
-@RunWith(AnnotationProcessorTestRunner.class)
-public class CarMapperTest {
+class CarMapper5Test {
 
-    @Test
-    public void shouldProvideMapperInstance() throws Exception {
-        assertThat( CarMapper.INSTANCE ).isNotNull();
-    }
+    @CompilerTest
+    void junit5Test() {
 
-    @Test
-    public void shouldMapAttributeByName() {
         //given
         Car car = new Car(
             "Morris",
@@ -59,8 +77,8 @@ public class CarMapperTest {
         assertThat( carDto.getMake() ).isEqualTo( car.getMake() );
     }
 
-    @Test
-    public void shouldMapReferenceAttribute() {
+    @CompilerTest
+    void shouldMapReferenceAttribute() {
         //given
         Car car = new Car(
             "Morris",
@@ -79,8 +97,8 @@ public class CarMapperTest {
         assertThat( carDto.getDriver().getName() ).isEqualTo( "Bob" );
     }
 
-    @Test
-    public void shouldReverseMapReferenceAttribute() {
+    @CompilerTest
+    void shouldReverseMapReferenceAttribute() {
         //given
         CarDto carDto = new CarDto( "Morris", 2, "1980", new PersonDto( "Bob" ), new ArrayList<PersonDto>() );
 
@@ -93,8 +111,8 @@ public class CarMapperTest {
         assertThat( car.getDriver().getName() ).isEqualTo( "Bob" );
     }
 
-    @Test
-    public void shouldMapAttributeWithCustomMapping() {
+    @CompilerTest
+    void shouldMapAttributeWithCustomMapping() {
         //given
         Car car = new Car(
             "Morris",
@@ -112,8 +130,8 @@ public class CarMapperTest {
         assertThat( carDto.getSeatCount() ).isEqualTo( car.getNumberOfSeats() );
     }
 
-    @Test
-    public void shouldConsiderCustomMappingForReverseMapping() {
+    @CompilerTest
+    void shouldConsiderCustomMappingForReverseMapping() {
         //given
         CarDto carDto = new CarDto( "Morris", 2, "1980", new PersonDto( "Bob" ), new ArrayList<PersonDto>() );
 
@@ -125,8 +143,8 @@ public class CarMapperTest {
         assertThat( car.getNumberOfSeats() ).isEqualTo( carDto.getSeatCount() );
     }
 
-    @Test
-    public void shouldApplyConverter() {
+    @CompilerTest
+    void shouldApplyConverter() {
         //given
         Car car = new Car(
             "Morris",
@@ -136,20 +154,16 @@ public class CarMapperTest {
             new ArrayList<Person>()
         );
 
-        System.out.println( CarMapper.class.getClassLoader() );
-
         //when
         CarDto carDto = CarMapper.INSTANCE.carToCarDto( car );
-
-        System.out.println( CarMapper.INSTANCE.getClass().getClassLoader() );
 
         //then
         assertThat( carDto ).isNotNull();
         assertThat( carDto.getManufacturingYear() ).isEqualTo( "1980" );
     }
 
-    @Test
-    public void shouldApplyConverterForReverseMapping() {
+    @CompilerTest
+    void shouldApplyConverterForReverseMapping() {
         //given
         CarDto carDto = new CarDto( "Morris", 2, "1980", new PersonDto( "Bob" ), new ArrayList<PersonDto>() );
 
@@ -161,8 +175,8 @@ public class CarMapperTest {
         assertThat( car.getManufacturingDate() ).isEqualTo( new GregorianCalendar( 1980, 0, 1 ).getTime() );
     }
 
-    @Test
-    public void shouldMapIterable() {
+    @CompilerTest
+    void shouldMapIterable() {
         //given
         Car car1 = new Car(
             "Morris",
@@ -197,8 +211,8 @@ public class CarMapperTest {
         assertThat( dtos.get( 1 ).getDriver().getName() ).isEqualTo( "Bill" );
     }
 
-    @Test
-    public void shouldReverseMapIterable() {
+    @CompilerTest
+    void shouldReverseMapIterable() {
         //given
         CarDto car1 = new CarDto( "Morris", 2, "1980", new PersonDto( "Bob" ), new ArrayList<PersonDto>() );
         CarDto car2 = new CarDto( "Railton", 4, "1934", new PersonDto( "Bill" ), new ArrayList<PersonDto>() );
@@ -221,8 +235,8 @@ public class CarMapperTest {
         assertThat( cars.get( 1 ).getDriver().getName() ).isEqualTo( "Bill" );
     }
 
-    @Test
-    public void shouldMapIterableAttribute() {
+    @CompilerTest
+    void shouldMapIterableAttribute() {
         //given
         Car car = new Car(
             "Morris",
@@ -243,8 +257,8 @@ public class CarMapperTest {
         assertThat( dto.getPassengers().get( 1 ).getName() ).isEqualTo( "Bill" );
     }
 
-    @Test
-    public void shouldReverseMapIterableAttribute() {
+    @CompilerTest
+    void shouldReverseMapIterableAttribute() {
         //given
         CarDto carDto = new CarDto(
             "Morris",
@@ -265,8 +279,8 @@ public class CarMapperTest {
         assertThat( car.getPassengers().get( 1 ).getName() ).isEqualTo( "Bill" );
     }
 
-    @Test
-    public void shouldMapEnumToString() {
+    @CompilerTest
+    void shouldMapEnumToString() {
         //given
         Car car = new Car();
         car.setCategory( Category.CONVERTIBLE );
@@ -278,8 +292,8 @@ public class CarMapperTest {
         assertThat( carDto.getCategory() ).isEqualTo( "CONVERTIBLE" );
     }
 
-    @Test
-    public void shouldMapStringToEnum() {
+    @CompilerTest
+    void shouldMapStringToEnum() {
         //given
         CarDto carDto = new CarDto();
         carDto.setCategory( "CONVERTIBLE" );
@@ -291,3 +305,4 @@ public class CarMapperTest {
         assertThat( car.getCategory() ).isEqualTo( Category.CONVERTIBLE );
     }
 }
+

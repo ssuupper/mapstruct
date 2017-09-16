@@ -25,9 +25,9 @@ import org.mapstruct.ap.testutil.compilation.model.CompilationOutcomeDescriptor;
  */
 class EclipseCompilingStatement extends CompilingStatement {
 
-    private static final List<String> ECLIPSE_COMPILER_CLASSPATH = buildEclipseCompilerClasspath();
+     static final List<String> ECLIPSE_COMPILER_CLASSPATH = buildEclipseCompilerClasspath();
 
-    private static final ClassLoader DEFAULT_ECLIPSE_COMPILER_CLASSLOADER =
+     static final ClassLoader DEFAULT_ECLIPSE_COMPILER_CLASSLOADER =
         new ModifiableURLClassLoader( newFilteringClassLoaderForEclipse() )
             .withPaths( ECLIPSE_COMPILER_CLASSPATH )
             .withPaths( PROCESSOR_CLASSPATH )
@@ -70,7 +70,7 @@ class EclipseCompilingStatement extends CompilingStatement {
             classOutputDir );
     }
 
-    private static FilteringParentClassLoader newFilteringClassLoaderForEclipse() {
+     static FilteringParentClassLoader newFilteringClassLoaderForEclipse() {
         return new FilteringParentClassLoader(
             // reload eclipse compiler classes
             "org.eclipse.",
