@@ -33,6 +33,7 @@ import org.mapstruct.ap.test.complex.source.Category;
 import org.mapstruct.ap.test.complex.source.Person;
 import org.mapstruct.ap.testutil.WithClasses;
 import org.mapstruct.ap.testutil.api.CompilerTest;
+import org.mapstruct.ap.testutil.runner.CustomClassLoaderFactory;
 import org.mapstruct.ap.testutil.runner.EclipseTemplateContextProvider;
 import org.mapstruct.ap.testutil.runner.JdkTemplateContextProvider;
 
@@ -43,7 +44,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @Extensions({
     @ExtendWith(JdkTemplateContextProvider.class),
-    @ExtendWith(EclipseTemplateContextProvider.class)
+    @ExtendWith(EclipseTemplateContextProvider.class),
+//    @ExtendWith(CustomClassLoaderFactory.class)
 
 })
 @WithClasses({

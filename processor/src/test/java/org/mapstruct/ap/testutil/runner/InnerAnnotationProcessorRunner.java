@@ -5,6 +5,7 @@
  */
 package org.mapstruct.ap.testutil.runner;
 
+import org.junit.platform.commons.util.ClassLoaderUtils;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
@@ -41,7 +42,7 @@ class InnerAnnotationProcessorRunner extends BlockJUnit4ClassRunner {
      *
      * @return the class loaded with the test class loader
      */
-    private static Class<?> replaceClassLoaderAndClass(Class<?> klass) {
+    static Class<?> replaceClassLoaderAndClass(Class<?> klass) {
         replaceContextClassLoader( klass );
 
         try {
@@ -54,7 +55,7 @@ class InnerAnnotationProcessorRunner extends BlockJUnit4ClassRunner {
     }
 
     static void replaceContextClassLoader(Class<?> klass) {
-        ModifiableURLClassLoader testClassLoader = new ModifiableURLClassLoader().withOriginOf( klass );
+        ModifiableURLClassLoader testClassLoader = new ModifiableURLClassLoader( ClassLoaderUtils.getDefaultClassLoader() ).withOriginOf( klass );
 
         Thread.currentThread().setContextClassLoader( testClassLoader );
     }
