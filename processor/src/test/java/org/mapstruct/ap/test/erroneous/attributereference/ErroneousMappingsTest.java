@@ -8,13 +8,19 @@ package org.mapstruct.ap.test.erroneous.attributereference;
 import javax.tools.Diagnostic.Kind;
 
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.Extensions;
 import org.junit.runner.RunWith;
 import org.mapstruct.ap.testutil.IssueKey;
 import org.mapstruct.ap.testutil.WithClasses;
+import org.mapstruct.ap.testutil.api.CompilerTest;
 import org.mapstruct.ap.testutil.compilation.annotation.CompilationResult;
 import org.mapstruct.ap.testutil.compilation.annotation.Diagnostic;
 import org.mapstruct.ap.testutil.compilation.annotation.ExpectedCompilationOutcome;
 import org.mapstruct.ap.testutil.runner.AnnotationProcessorTestRunner;
+import org.mapstruct.ap.testutil.runner.CacheCompliationExtension;
+import org.mapstruct.ap.testutil.runner.EclipseTemplateContextProvider;
+import org.mapstruct.ap.testutil.runner.JdkTemplateContextProvider;
 
 /**
  * Test for using unknown attributes in {@code @Mapping}.
@@ -22,10 +28,16 @@ import org.mapstruct.ap.testutil.runner.AnnotationProcessorTestRunner;
  * @author Gunnar Morling
  */
 @WithClasses({ Source.class, Target.class })
-@RunWith(AnnotationProcessorTestRunner.class)
+@Extensions({
+    @ExtendWith(JdkTemplateContextProvider.class),
+    @ExtendWith(EclipseTemplateContextProvider.class),
+    @ExtendWith(CacheCompliationExtension.class),
+//    @ExtendWith(CustomClassLoaderFactory.class)
+
+})
 public class ErroneousMappingsTest {
 
-    @Test
+    @CompilerTest
     @IssueKey("11")
     @WithClasses( { ErroneousMapper.class, AnotherTarget.class } )
     @ExpectedCompilationOutcome(
@@ -59,7 +71,7 @@ public class ErroneousMappingsTest {
     public void shouldFailToGenerateMappings() {
     }
 
-    @Test
+    @CompilerTest
     @WithClasses( { ErroneousMapper1.class, DummySource.class } )
     @ExpectedCompilationOutcome(
         value = CompilationResult.FAILED,
@@ -73,7 +85,7 @@ public class ErroneousMappingsTest {
     public void shouldFailToGenerateMappingsErrorOnMandatoryParameterName() {
     }
 
-    @Test
+    @CompilerTest
     @WithClasses( { ErroneousMapper2.class } )
     @ExpectedCompilationOutcome(
         value = CompilationResult.FAILED,
