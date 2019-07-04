@@ -213,6 +213,10 @@ public class ProcessorSuiteRunner extends ParentRunner<ProcessorTestCase> {
 
             originalOut.println( "executing " + child.processor.name().toLowerCase() );
 
+            /**
+             * 启动 mvndebug 使得可以远程调试编译过程 annotation Processor 的处理过程
+             */
+            verifier.setDebugJvm(true);
             verifier.executeGoals( goals );
             verifier.verifyErrorFreeLog();
         }
